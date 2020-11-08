@@ -24,6 +24,8 @@
         <th scope="col">Price</th>
         <th scope="col">Delete</th>
         <th scope="col">Detail</th>
+        <th scope="col">Edit</th>
+
     </tr>
     </thead>
     <tbody>
@@ -37,6 +39,9 @@
             <td>{{$computers->price}}</td>
             <td><a class="deleteComputer btn btn-danger" data-id="{{$computers->id}}">Delete</a></td>
             <td><a class="showDetail btn btn-warning" data-id="{{$computers->id}}" data-name="{{$computers->name}}" data-vendor="{{$computers->vendor}}" data-price="{{$computers->price}}">Detail</a></td>
+            <td><a class="showEditModal btn btn-success" data-id="{{$computers->id}}" data-name="{{$computers->name}}"
+                   data-vendor="{{$computers->vendor}}"
+                 data-price="{{$computers->price}}">Edit</a></td>
         </tr>
     @endforeach
     </tbody>
@@ -85,6 +90,45 @@
     </div>
 </div>
 
+<div class="modal fade" id="updateCom" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add new Computer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm" role="form">
+                    @csrf
+                    <table>
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" name="name" id="updateName" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td>Vendor:</td>
+                            <td><input type="text" name="vendor" id="updateVendor" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td>Price:</td>
+                            <td><input type="number" name="price" id="updatePrice" class="form-control"></td>
+                        </tr>
+                    </table>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmUpdate">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {{--show detail--}}
 <div class="modal fade" id="detailCom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -129,6 +173,7 @@
                         "<td>" + data.vendor + "</td>" +
                         "<td>" + data.price + "</td>" +
                         "<td>" + "<a class='deleteComputer test btn btn-danger' data-id='"+ data.id +"'>Delete</a>"+ "</td>" +
+                        "<td>" + "<a class='showDetail btn btn-warning' data-id='"+ data.id+"' data-name='"+ data.name+"' data-vendor='"+ data.vendor+"' data-price='"+ data.price +"'>Detail</a> " + "</td>" +
                         "</tr>");
                 }
             });
@@ -167,6 +212,33 @@
 
             });
         });
+
+
+        // update
+        $('.showEditModal').click(function () {
+            com_id = $(this).data('id');
+            let name = $(this).data('name');
+            let vendor = $(this).data('vendor');
+            let price = $(this).data('price');
+            $('#updateCom').modal('show');
+
+            $('#updateName').val(name);
+            $('#updateVendor').val(vendor);
+            $('#updatePrice').val(price);
+
+        });
+
+        $('#confirmUpdate').click(function () {
+            $.ajax({
+                url: '/computer/update/' + com_id,
+                type: 'post',
+                data: $('#updateForm').serialize(),
+                success: function (data) {
+                    alert('success');
+                }
+            });
+        });
+
     });
 </script>
 

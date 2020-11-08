@@ -20,3 +20,4 @@ Route::get('/computer',[\App\Http\Controllers\ComputerController::class, 'index'
 Route::post('/computer/add', [\App\Http\Controllers\ComputerController::class,'store'])->name('computer.store');
 Route::get('/computer/delete/{id}',[\App\Http\Controllers\ComputerController::class, 'delete'])->name('computer.delete');
 Route::get('/computer/show/{id}',[\App\Http\Controllers\ComputerController::class, 'show'])->name('computer.show');
+Route::post('/computer/update/{id}',[\App\Http\Controllers\ComputerController::class, 'update'])->name('computer.update');
