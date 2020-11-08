@@ -18,11 +18,12 @@
 <body>
 <table class="table table-bordered" id="mainTable">
     <thead>
-    <tr>
+    <tr style="text-align: center">
         <th scope="col">Name</th>
         <th scope="col">Vendor</th>
         <th scope="col">Price</th>
         <th scope="col">Delete</th>
+        <th scope="col">Detail</th>
     </tr>
     </thead>
     <tbody>
@@ -30,11 +31,12 @@
         <a>No data</a>
     @endif
     @foreach($computer as $computers)
-        <tr>
+        <tr style="text-align: center">
             <td>{{$computers->name}}</td>
             <td>{{$computers->vendor}}</td>
             <td>{{$computers->price}}</td>
-            <td><a data-id="{{$computers->id}}" class="deleteCom btn btn-danger">Delete</a></td>
+            <td><a class="deleteComputer btn btn-danger" data-id="{{$computers->id}}">Delete</a></td>
+            <td><a class="showDetail btn btn-warning" data-id="{{$computers->id}}" data-name="{{$computers->name}}" data-vendor="{{$computers->vendor}}" data-price="{{$computers->price}}">Detail</a></td>
         </tr>
     @endforeach
     </tbody>
@@ -83,6 +85,30 @@
     </div>
 </div>
 
+{{--show detail--}}
+<div class="modal fade" id="detailCom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title detailTitle" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body detailBody">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{--end show detail--}}
+
+
 <script>
     $(document).ready(function () {
 
@@ -98,11 +124,11 @@
                 type: 'post',
                 data: $('#mainForm').serialize(),
                 success: function (data) {
-                    $('#mainTable').append("<tr>" +
+                    $('#mainTable').append("<tr style='text-align: center'>" +
                         "<td>" + data.name + "</td>" +
                         "<td>" + data.vendor + "</td>" +
                         "<td>" + data.price + "</td>" +
-                        "<td>" + "<a class='deleteCom btn btn-danger' data-id="+ data.id +">Delete</a>"+ "</td>" +
+                        "<td>" + "<a class='deleteComputer test btn btn-danger' data-id='"+ data.id +"'>Delete</a>"+ "</td>" +
                         "</tr>");
                 }
             });
@@ -111,7 +137,7 @@
 
         //delete
         let com_id;
-        $('.deleteCom').click(function () {
+        $('.deleteComputer').click(function () {
             com_id = $(this).data('id');
             $.ajax({
                 url: '/computer/delete/' + com_id,
@@ -123,6 +149,24 @@
             });
         });
 
+        //show detail
+
+        $('.showDetail').click(function () {
+            com_id = $(this).data('id');
+            let name = $(this).data('name');
+            let vendor = $(this).data('vendor');
+            let price = $(this).data('price');
+            $('#detailCom').modal('show');
+            $.ajax({
+                url: '/computer/show/' + com_id,
+                type: 'get',
+                success: function (data) {
+                    $('.detailTitle').text(data.name);
+                    $('.detailBody').text(data.vendor);
+                }
+
+            });
+        });
     });
 </script>
 

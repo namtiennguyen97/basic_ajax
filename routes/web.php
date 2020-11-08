@@ -19,3 +19,4 @@ Route::get('/', function () {
 Route::get('/computer',[\App\Http\Controllers\ComputerController::class, 'index'])->name('computer.index');
 Route::post('/computer/add', [\App\Http\Controllers\ComputerController::class,'store'])->name('computer.store');
 Route::get('/computer/delete/{id}',[\App\Http\Controllers\ComputerController::class, 'delete'])->name('computer.delete');
+Route::get('/computer/show/{id}',[\App\Http\Controllers\ComputerController::class, 'show'])->name('computer.show');
