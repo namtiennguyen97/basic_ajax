@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Accessory;
 use App\Models\Computer;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,8 @@ class ComputerController extends Controller
     public function index()
     {
         $computer = Computer::all();
-        return view('computer.index', compact('computer'));
+        $accessory = Accessory::all();
+        return view('computer.index', compact('computer','accessory'));
     }
 
     public function store(Request $request)

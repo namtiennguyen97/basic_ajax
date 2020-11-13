@@ -21,3 +21,7 @@ Route::post('/computer/add', [\App\Http\Controllers\ComputerController::class,'s
 Route::get('/computer/delete/{id}',[\App\Http\Controllers\ComputerController::class, 'delete'])->name('computer.delete');
 Route::get('/computer/show/{id}',[\App\Http\Controllers\ComputerController::class, 'show'])->name('computer.show');
 Route::post('/computer/update/{id}',[\App\Http\Controllers\ComputerController::class, 'update'])->name('computer.update');
+
+
+Route::post('/accessory/add',[\App\Http\Controllers\AccessoryController::class, 'store'])->name('accessory.store');
+Route::get('/accessory/create',[\App\Http\Controllers\AccessoryController::class,'create'])->name('accessory.create');

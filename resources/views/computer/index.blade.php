@@ -51,6 +51,10 @@
 <button type="button" class="btn btn-primary" id="showAddComputer">
     Add new Computer
 </button>
+
+<button type="button" class="btn btn-success" id="showAccessory">
+    Show accessories
+</button>
 {{--MODAL ADD--}}
 <div class="modal fade" id="addComputer" data-backdrop="static" data-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -149,10 +153,9 @@
         </div>
     </div>
 </div>
-
 {{--end show detail--}}
 
-
+{{--ajax script--}}
 <script>
     $(document).ready(function () {
 
@@ -238,10 +241,98 @@
                 }
             });
         });
+        //show accessory
+        $('#showAccessory').click(function () {
+            $('#accessoryShow').modal('show');
+        });
+
+        // get accessory form create
+        $('#showAddAccessory').click(function () {
+                $.ajax({
+                   url: 'accessory/create',
+                   type: 'get',
+                   success: function (data) {
+                    $('#addAccessory').html(data);
+                   }
+                });
+        });
+
+        //add accessory - store
+        $('#addAccessory').click(function () {
+            $.ajax({
+               url: '/accessory/add',
+               type: 'post',
+                data: $('#accessoryForm').serialize(),
+                {{--data: {--}}
+                {{--    "_token": "{{ csrf_token() }}",--}}
+                {{--    --}}
+                {{--   // name: 'name',--}}
+                {{--   //  vendor: 'vendor',--}}
+                {{--   //  image: 'image',--}}
+                {{--   //  price: 'price'--}}
+                {{--},--}}
+                success: function (data) {
+                    alert('ok');
+                }
+            });
+        });
 
     });
 </script>
+{{--end ajax script--}}
 
+{{--accessory--}}
+<div class="modal fade" id="accessoryShow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Accessory</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body container">
+                <table class="table table-bordered" id="accessoryTable">
+                    <thead>
+                    <tr style="text-align: center">
+                        <th scope="col">Name</th>
+                        <th scope="col">Vendor</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Delete</th>
+                        <th scope="col">Edit</th>
 
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(count($accessory)==0)
+                        <a>No data</a>
+                    @endif
+                    @foreach($accessory as $accessories)
+                        <tr style="text-align: center">
+                            <td>{{$accessories->name}}</td>
+                            <td>{{$accessories->vendor}}</td>
+                            <td><img src="{{asset($accessories->image)}}" style="height: 50px; width: 50px"></td>
+                            <td>{{$accessories->price}}</td>
+                            <td><a class="deleteComputer btn btn-danger" data-id="{{$accessories->id}}">Delete</a></td>
+                            <td><a class="showEditModal btn btn-success" data-id="" data-name=""
+                                   data-vendor=""
+                                   data-price="">Edit</a></td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <div id="addAccessory" >
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="showAddAccessory">Add new one</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
